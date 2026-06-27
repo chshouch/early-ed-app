@@ -468,9 +468,11 @@ function generateInitialIssues() {
 
 /* ===== 持久化 ===== */
 const STORAGE_KEY = 'early-ed-app-data';
+const DATA_VERSION = 3;
 
 function saveState() {
   const persistData = {
+    version: DATA_VERSION,
     adminPassword: state.adminPassword,
     theme: state.theme,
     syncUrl: state.syncUrl,
@@ -491,6 +493,15 @@ function loadState() {
   if (saved) {
     try {
       const data = JSON.parse(saved);
+      if (!data.version || data.version < DATA_VERSION) {
+        console.log('数据版本不匹配，重新生成...', data.version, '->', DATA_VERSION);
+        state.scheduleData = generateInitialData();
+        state.issues = generateInitialIssues();
+        state.visitCount = 1;
+        state.adminPassword = data.adminPassword || 'admin123';
+        saveState();
+        return;
+      }
       state.adminPassword = data.adminPassword || 'admin123';
       state.theme = data.theme || state.theme;
       state.syncUrl = data.syncUrl || '';
