@@ -286,7 +286,14 @@ function renderMonthContent() {
           ${data.weeks.map((week, wi) => `
             <tr>
               <td style="background:${cfg.light};font-weight:700;">${week.stageName}</td>
-              ${dimKeys.map(k => `<td style="background:#fff;">${week.days[0][k] || '-'}</td>`).join('')}
+              ${dimKeys.map(k => `
+                <td class="editable ${state.isAdmin ? 'admin-mode' : ''}"
+                    style="background:#fff;"
+                    onclick="editCell(${wi}, 0, '${k}')"
+                    data-week="${wi}" data-day="0" data-key="${k}">
+                  ${week.days[0][k] || '-'}
+                </td>
+              `).join('')}
             </tr>
           `).join('')}
         </tbody>
