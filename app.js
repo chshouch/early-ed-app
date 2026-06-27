@@ -468,7 +468,7 @@ function generateInitialIssues() {
 
 /* ===== 持久化 ===== */
 const STORAGE_KEY = 'early-ed-app-data';
-const DATA_VERSION = 3;
+const DATA_VERSION = 4;
 
 function saveState() {
   const persistData = {
@@ -506,6 +506,24 @@ function loadState() {
       state.theme = data.theme || state.theme;
       state.syncUrl = data.syncUrl || '';
       state.scheduleData = data.scheduleData || generateInitialData();
+      // 验证数据结构：确保每个月有4周，每周有6天
+      let needsRegen = false;
+      for (const cfg of monthConfig) {
+        const d = state.scheduleData[cfg.month];
+        if (!d || !d.weeks || d.weeks.length !== 4) {
+          needsRegen = true;
+          break;
+        }
+        for (const w of d.weeks) {
+          if (!w.days || w.days.length !== 6) { needsRegen = true; break; }
+        }
+        if (needsRegen) break;
+      }
+      if (needsRegen) {
+        console.log('数据结构异常，重新生成...');
+        state.scheduleData = generateInitialData();
+        saveState();
+      }
       state.issues = data.issues || generateInitialIssues();
       state.visitCount = (data.visitCount || 0) + 1;
     } catch(e) {
@@ -1037,9 +1055,24 @@ function showToast(msg, type = '') {
 }
 
 /* ===== 事件绑定 ===== */
+window.addEventListener('error', function(e) {
+  console.error('全局错误:', e.message, e.filename, e.lineno);
+  var c = document.getElementById('monthContent');
+  if (c && c.children.length === 0) {
+    c.innerHTML = '<div style="padding:20px;color:#E53935;text-align:center;">⚠️ 渲染出错: ' + e.message + '<br>请清除浏览器缓存后刷新</div>';
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
-  loadState();
-  applyTheme();
+  try {
+    loadState();
+    applyTheme();
+  } catch(e) {
+    console.error('初始化失败:', e);
+    localStorage.removeItem('early-ed-app-data');
+    state.scheduleData = generateInitialData();
+    state.issues = generateInitialIssues();
+  }
 
   // 导航标签
   document.querySelectorAll('.nav-tab').forEach(tab => {
