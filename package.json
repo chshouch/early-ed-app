@@ -1,0 +1,11 @@
+{
+  "name": "early-ed-app",
+  "version": "1.0.0",
+  "description": "早教规划在线编辑工具",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site, no build needed'"
+  },
+  "dependencies": {}
+}
