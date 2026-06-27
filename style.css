@@ -314,8 +314,95 @@ body.admin-mode::after {
   .view-header h1 { font-size: 22px; }
   .month-header h2 { font-size: 20px; }
   .main-content { padding: 14px 10px 40px; }
-  .modal { padding: 20px; }
+  .modal { padding: 20px; max-width: 95vw; }
   .settings-row label { min-width: 80px; }
+
+  /* --- Schedule Table: card layout --- */
+  .schedule-table { min-width: auto; display: block; }
+  .schedule-table thead { display: none; }
+  .schedule-table tbody { display: block; }
+  .schedule-table tr {
+    display: block;
+    margin-bottom: 12px;
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .schedule-table td {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 14px;
+  }
+  .schedule-table td:last-child { border-bottom: none; }
+  .schedule-table td.day-cell {
+    font-size: 15px;
+    font-weight: 700;
+    justify-content: center;
+    background: var(--bg2);
+    border-bottom: 2px solid var(--rule);
+  }
+  .schedule-table td.editable.admin-mode { border: 1px dashed rgba(255,152,0,0.3); }
+  /* Dimension labels on mobile */
+  .schedule-table td:nth-child(2)::before { content: '📖 语：'; font-weight: 700; min-width: 52px; }
+  .schedule-table td:nth-child(3)::before { content: '🔤 英：'; font-weight: 700; min-width: 52px; }
+  .schedule-table td:nth-child(4)::before { content: '🔬 科：'; font-weight: 700; min-width: 52px; }
+  .schedule-table td:nth-child(5)::before { content: '🔢 数：'; font-weight: 700; min-width: 52px; }
+  .schedule-table td:nth-child(6)::before { content: '🎨 美音：'; font-weight: 700; min-width: 52px; }
+  .schedule-table td:nth-child(7)::before { content: '🤝 社：'; font-weight: 700; min-width: 52px; }
+  .summary-row td {
+    display: block;
+    border: none;
+    padding: 12px 14px !important;
+    background: var(--bg2) !important;
+  }
+
+  /* --- Overview Table: card layout --- */
+  .overview-table { display: block; box-shadow: none; }
+  .overview-table thead { display: none; }
+  .overview-table tbody { display: block; }
+  .overview-table tr {
+    display: block;
+    margin-bottom: 12px;
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .overview-table td {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 14px;
+    text-align: left;
+  }
+  .overview-table td:last-child { border-bottom: none; }
+  .overview-table td:first-child {
+    font-weight: 700;
+    justify-content: center;
+    background: var(--bg2);
+    border-bottom: 2px solid var(--rule);
+  }
+  .overview-table td.editable.admin-mode { border: 1px dashed rgba(255,152,0,0.3); }
+  .overview-table td:nth-child(2)::before { content: '📖 语：'; font-weight: 700; min-width: 52px; }
+  .overview-table td:nth-child(3)::before { content: '🔤 英：'; font-weight: 700; min-width: 52px; }
+  .overview-table td:nth-child(4)::before { content: '🔬 科：'; font-weight: 700; min-width: 52px; }
+  .overview-table td:nth-child(5)::before { content: '🔢 数：'; font-weight: 700; min-width: 52px; }
+  .overview-table td:nth-child(6)::before { content: '🎨 美音：'; font-weight: 700; min-width: 52px; }
+  .overview-table td:nth-child(7)::before { content: '🤝 社：'; font-weight: 700; min-width: 52px; }
+
+  /* --- Issues & Settings --- */
+  .issue-header { flex-direction: column; gap: 8px; }
+  .issue-actions { align-self: flex-end; }
+  .issues-toolbar { flex-direction: column; align-items: stretch; }
+  .filter-tabs { justify-content: center; }
 }
 
 /* ===== Print ===== */
