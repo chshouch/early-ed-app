@@ -1,0 +1,18 @@
+name: 每日早教推送
+
+on:
+  schedule:
+    # 每天北京时间早上9点（UTC 1:00）
+    - cron: '0 1 * * *'
+  workflow_dispatch: # 也支持手动触发
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 执行推送
+        env:
+          SC_KEY: ${{ secrets.SC_KEY }}
+        run: node scripts/daily-push.js
