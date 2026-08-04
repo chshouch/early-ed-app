@@ -14,5 +14,5 @@ jobs:
 
       - name: 执行推送
         env:
-          SC_KEY: ${{ secrets.SC_KEY }}
+          WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
         run: node scripts/daily-push.js
