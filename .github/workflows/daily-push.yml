@@ -14,5 +14,5 @@ jobs:
 
       - name: 执行推送
         env:
-          WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
+          DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
         run: node scripts/daily-push.js
