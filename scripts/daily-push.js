@@ -1,7 +1,7 @@
 /**
  * 每日早教推送脚本
  * 读取 schedule.json，根据当前日期找到当天的活动内容，
- * 拼成方案C格式的消息，通过企业微信群机器人推送到家庭群。
+ * 拼成方案C格式的消息，通过钉钉群机器人推送到家庭群。
  */
 
 const https = require('https');
@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 // ===== 配置 =====
-const WECOM_WEBHOOK = process.env.WECOM_WEBHOOK; // 企业微信群机器人 webhook URL
+const DINGTALK_WEBHOOK = process.env.DINGTALK_WEBHOOK; // 钉钉群机器人 webhook URL
 const SCHEDULE_PATH = path.join(__dirname, '..', 'schedule.json');
 
 // 维度配置
@@ -163,19 +163,19 @@ function buildMessage(lesson) {
   return lines.join('\n');
 }
 
-// ===== 通过企业微信群机器人推送 =====
+// ===== 通过钉钉群机器人推送 =====
 function pushToWeChat(message) {
   return new Promise((resolve, reject) => {
-    if (!WECOM_WEBHOOK) {
-      console.error('错误：WECOM_WEBHOOK 未配置');
-      reject(new Error('WECOM_WEBHOOK not configured'));
+    if (!DINGTALK_WEBHOOK) {
+      console.error('错误：DINGTALK_WEBHOOK 未配置');
+      reject(new Error('DINGTALK_WEBHOOK not configured'));
       return;
     }
 
-    // 企业微信群机器人支持 markdown 消息
+    // 钉钉机器人 text 消息
     const payload = JSON.stringify({
-      msgtype: 'markdown',
-      markdown: {
+      msgtype: 'text',
+      text: {
         content: message
       }
     });
@@ -183,7 +183,7 @@ function pushToWeChat(message) {
     // 解析 webhook URL
     let url;
     try {
-      url = new URL(WECOM_WEBHOOK);
+      url = new URL(DINGTALK_WEBHOOK);
     } catch(e) {
       reject(new Error(`webhook URL 无效: ${e.message}`));
       return;
@@ -203,14 +203,14 @@ function pushToWeChat(message) {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
-        console.log('企业微信响应:', res.statusCode, data);
+        console.log('钉钉响应:', res.statusCode, data);
         if (res.statusCode === 200) {
           try {
             const json = JSON.parse(data);
             if (json.errcode === 0) {
               resolve(json);
             } else {
-              reject(new Error(`企业微信返回错误: ${json.errmsg || data}`));
+              reject(new Error(`钉钉返回错误: ${json.errmsg || data}`));
             }
           } catch(e) {
             reject(new Error(`解析响应失败: ${data}`));
